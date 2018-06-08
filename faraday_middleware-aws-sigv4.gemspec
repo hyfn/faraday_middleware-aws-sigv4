@@ -4,13 +4,13 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = 'faraday_middleware-aws-sigv4'
-  spec.version       = '0.2.4'
+  spec.version       = '0.2.5'
   spec.authors       = ['Genki Sugawara']
   spec.email         = ['sugawara@cookpad.com']
 
   spec.summary       = %q{Faraday middleware for AWS Signature Version 4 using aws-sigv4.}
   spec.description   = %q{Faraday middleware for AWS Signature Version 4 using aws-sigv4.}
-  spec.homepage      = 'https://github.com/winebarrel/faraday_middleware-aws-sigv4'
+  spec.homepage      = 'https://github.com/hyfn/faraday_middleware-aws-sigv4'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
