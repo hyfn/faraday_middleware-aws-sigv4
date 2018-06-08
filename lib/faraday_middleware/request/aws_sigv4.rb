@@ -21,15 +21,15 @@ class FaradayMiddleware::AwsSigV4 < Faraday::Middleware
     request = build_aws_sigv4_request(env)
     signature = @signer.sign_request(request)
 
-    env.request_headers.update(signature.headers)
+    env[:request_headers] = signature.headers
   end
 
   def build_aws_sigv4_request(env)
     {
-      http_method: env.method.to_s,
-      url: seahorse_encode_query(env.url),
-      headers: env.request_headers,
-      body: env.body,
+      http_method: env[:method].to_s,
+      url: seahorse_encode_query(env[:url]),
+      headers: env[:request_headers],
+      body: env[:body],
     }
   end
 end

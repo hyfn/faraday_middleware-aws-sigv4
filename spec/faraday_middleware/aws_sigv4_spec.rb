@@ -44,8 +44,7 @@ RSpec.describe FaradayMiddleware::AwsSigV4 do
   end
 
   let(:default_expected_headers) do
-    {'User-Agent'=>"Faraday v#{Faraday::VERSION}",
-     'host'=>'apigateway.us-east-1.amazonaws.com',
+    {'host'=>'apigateway.us-east-1.amazonaws.com',
      'x-amz-date'=>'20150101T000000Z',
      'x-amz-content-sha256'=>
       'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
@@ -66,8 +65,8 @@ RSpec.describe FaradayMiddleware::AwsSigV4 do
       stub.get('/account') do |env|
         expected_headers_without_authorization = expected_headers.dup
         authorization = expected_headers_without_authorization.delete('authorization')
-        expect(env.request_headers).to include expected_headers_without_authorization
-        expect(env.request_headers.fetch('authorization')).to match Regexp.new(authorization)
+        expect(env[:request_headers]).to include expected_headers_without_authorization
+        expect(env[:request_headers].fetch('authorization')).to match Regexp.new(authorization)
         [200, {'Content-Type' => 'application/json'}, JSON.dump(response)]
       end
     end
@@ -75,7 +74,7 @@ RSpec.describe FaradayMiddleware::AwsSigV4 do
 
   context 'without query' do
     let(:signature) do
-      '9b6930f489b5cfe65e2bc43d977d798b93514a298bde68877bc75bac0dbfa7b5'
+      '71bfbcd927a3042c32102ddc2da8ca4ba4e6ff4a74b1c56d5ea720ea5cc5cc29'
     end
 
     subject { client.get('/account').body }
@@ -88,7 +87,7 @@ RSpec.describe FaradayMiddleware::AwsSigV4 do
 
     context 'include space' do
       let(:signature) do
-        '5301beb69371e0582fddc550c1a59fdecbe0ae4ef101ed2e331ca12af5df8331'
+        'fec21fc16aac5f0b6d7e9b779653ba4d7a649bced43a65a87df85db5d4060dc4'
       end
 
       let(:params) { {foo: 'b a r', zoo: 'b a z'} }
@@ -98,7 +97,7 @@ RSpec.describe FaradayMiddleware::AwsSigV4 do
 
     context 'not include space' do
       let(:signature) do
-        '601396c7568b0051cf165bf1114a897b0f02a82dfeb329802e7e15735ba7fe8f'
+        'cd899f9d60d08484cd5cc9b473e64308c033344a3cd4f30d392e6c8049dbe712'
       end
 
       let(:params) { {foo: 'bar', zoo: 'baz'} }

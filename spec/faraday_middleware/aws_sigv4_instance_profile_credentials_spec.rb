@@ -39,8 +39,7 @@ RSpec.describe FaradayMiddleware::AwsSigV4 do
   end
 
   let(:expected_headers) do
-    {'User-Agent'=>"Faraday v#{Faraday::VERSION}",
-     'host'=>'apigateway.us-east-1.amazonaws.com',
+    {'host'=>'apigateway.us-east-1.amazonaws.com',
      'x-amz-content-sha256'=>
       'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}
   end
@@ -69,7 +68,7 @@ RSpec.describe FaradayMiddleware::AwsSigV4 do
 
     client = faraday do |stub|
       stub.get('/account') do |env|
-        account_headers = env.request_headers
+        account_headers = env[:request_headers]
         [200, {'Content-Type' => 'application/json'}, JSON.dump(response)]
       end
     end
@@ -84,7 +83,7 @@ RSpec.describe FaradayMiddleware::AwsSigV4 do
     expect(account_headers.fetch('authorization')).to match Regexp.new(
       authz_tmpl % {
         access_key_id: 'akid1420070400',
-        signature: '4bdffc5395997a8dcdd5ecc3290e0b5bb48ef2aef46df4ff7b7ff9c61dc424c2',
+        signature: '93bbcf47fe584eeba8a2cc08e9592e4e0d6367866b0be118b0dcc1b3328f8a2c',
       }
     )
 
@@ -101,7 +100,7 @@ RSpec.describe FaradayMiddleware::AwsSigV4 do
     expect(account_headers.fetch('authorization')).to match Regexp.new(
       authz_tmpl % {
         access_key_id: 'akid1420070400',
-        signature: 'ab2f80094ae9185120c3b73fd14928f5de551bbb55abe7c5b0f0d37080eca7b5',
+        signature: '03cab6830cb909b4647c34ba24a1932847353a1cf37021dfd629a280c1d0d0ca',
       }
     )
 
@@ -118,7 +117,7 @@ RSpec.describe FaradayMiddleware::AwsSigV4 do
     expect(account_headers.fetch('authorization')).to match Regexp.new(
       authz_tmpl % {
         access_key_id: 'akid1420074000',
-        signature: 'a14f1c44f16264aac79ebb7b08e12a8f535b0de1739c1cec7a523b7fde589be9',
+        signature: 'f0c3357303f578832e0bc943bce9c2a9040f9c62e8f16bd50e549ced7e3c06e1',
       }
     )
   end
